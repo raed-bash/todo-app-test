@@ -69,12 +69,18 @@ export const setTodosEditAsync = (todoId, success, fail) => (dispatch) => {
     });
 };
 export const createTodosAsync = (todo, success, fail) => (dispatch) => {
-  todo = { ...todo, id: 1, user_id: 1, status: "pending" }; 
+  todo = {
+    ...todo,
+    id: null,
+    status: "pending",
+  };
+
   todoServer
     .post(`/`, todo)
     .then((res) => {
       dispatch(createTodos(res.data));
-      success(res.data);
+      console.log(res.data);
+      success();
     })
     .catch((error) => {
       fail(error);

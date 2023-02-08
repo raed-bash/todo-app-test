@@ -62,11 +62,12 @@ export const setUsersEditAsync = (userId, success, fail) => (dispatch) => {
     });
 };
 export const createUserAsync = (user, success, fail) => (dispatch) => {
-  user = { ...user, id: 1 };
+  user = { ...user, id: null };
 
   userServer
     .post(`/`, user)
     .then((res) => {
+      console.log(res);
       dispatch(createUsers(res.data));
       success(res.data);
     })
@@ -75,7 +76,6 @@ export const createUserAsync = (user, success, fail) => (dispatch) => {
     });
 };
 export const editUserAsync = (user, success, fail) => (dispatch) => {
- 
   userServer
     .patch(`/${user.id}`, user)
     .then(() => {
