@@ -5,7 +5,7 @@ import { deleteUsersAsync } from "../features/users_slice";
 export default function Modal({ va, setErrorMessage }) {
   const dispatch = useDispatch();
   const checkIsUserOrTodo = () => {
-    if(va.name){
+    if (va.name) {
       dispatch(
         deleteUsersAsync(
           va.id,
@@ -15,8 +15,7 @@ export default function Modal({ va, setErrorMessage }) {
           }
         )
       );
-
-    }else{
+    } else {
       dispatch(
         deleteTodosAsync(
           va.id,
@@ -27,7 +26,6 @@ export default function Modal({ va, setErrorMessage }) {
         )
       );
     }
-   
   };
   return va.id ? (
     <div
@@ -46,7 +44,7 @@ export default function Modal({ va, setErrorMessage }) {
             </h5>
           </div>
           <div className="modal-body">
-            Are You sure Deleted {va.name ? "User" : "Todo"}?:
+            Are You sure Deleted {va.name ? "User" : "Todo"}?:{" "}
             {va.name ? va.name : va.title}
           </div>
           <div className="modal-footer">
