@@ -20,9 +20,6 @@ export default function Navbar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div className="navbar-nav">
-          <LinkA className="nav-item nav-link " to={"/"}>
-            Home <span className="sr-only"></span>
-          </LinkA>
           <LinkA className="nav-item nav-link" to={"/users"}>
             Users
           </LinkA>

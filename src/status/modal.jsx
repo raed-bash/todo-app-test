@@ -45,7 +45,7 @@ export default function Modal({ va, setErrorMessage }) {
           </div>
           <div className="modal-body">
             Are You sure Deleted {va.name ? "User" : "Todo"}?:{" "}
-            {va.name ? va.name : va.title}
+            <b>{va.name ? va.name : va.title}</b>
           </div>
           <div className="modal-footer">
             <button
