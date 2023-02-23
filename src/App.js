@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./components/home";
 import Layout from "./components/layout";
 import CreateOrEditTodo from "./components/todos/create_edit_todo";
 import Todos from "./components/todos/todos";
@@ -10,6 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route index element={<Home />}></Route>
           <Route path="users" element={<Users />}></Route>
           <Route path="todos" element={<Todos />}></Route>
           <Route path="create-edit-user" element={<CreateOrEditUser />}></Route>
