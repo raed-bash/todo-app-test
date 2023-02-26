@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const todoServer = axios.create({
-  baseURL: "https://gorest.co.in/public/v2/todos",
+  baseURL: "https://gorest.co.in/public/v2",
   headers: {
     "Content-Type": "application/json",
     Authorization:
@@ -36,9 +36,9 @@ export const todosSlice = createSlice({
     },
   },
 });
-export const loadTodosAsync = (success, fail) => (dispatch) => {
+export const loadTodosAsync = (userId, success, fail) => (dispatch) => {
   todoServer
-    .get("/")
+    .get(`/users/${userId}/todos`)
     .then((res) => {
       dispatch(loadTodos(res.data));
     })
@@ -48,7 +48,7 @@ export const loadTodosAsync = (success, fail) => (dispatch) => {
 };
 export const deleteTodosAsync = (todoId, success, fail) => (dispatch) => {
   todoServer
-    .delete(`${todoId}`)
+    .delete(`/todos/${todoId}`)
     .then((res) => {
       dispatch(deleteTodos(todoId));
       success();
@@ -59,7 +59,7 @@ export const deleteTodosAsync = (todoId, success, fail) => (dispatch) => {
 };
 export const setTodosEditAsync = (todoId, success, fail) => (dispatch) => {
   todoServer
-    .get(`/${todoId}`)
+    .get(`/todos/${todoId}`)
     .then((res) => {
       res.data = { ...res.data, due_on: res.data.due_on.slice(0, 10) };
       success(res.data);
@@ -69,17 +69,10 @@ export const setTodosEditAsync = (todoId, success, fail) => (dispatch) => {
     });
 };
 export const createTodosAsync = (todo, success, fail) => (dispatch) => {
-  todo = {
-    ...todo,
-    id: null,
-    status: "pending",
-  };
-
   todoServer
-    .post(`/`, todo)
+    .post(`/todos`, todo)
     .then((res) => {
       dispatch(createTodos(res.data));
-      console.log(res.data);
       success();
     })
     .catch((error) => {
@@ -87,9 +80,8 @@ export const createTodosAsync = (todo, success, fail) => (dispatch) => {
     });
 };
 export const editTodosAsync = (todo, success, fail) => (dispatch) => {
-  console.log(todo);
   todoServer
-    .patch(`/${todo.id}`, todo)
+    .patch(`/todos/${todo.id}`, todo)
     .then(() => {
       success();
       dispatch(editTodos());
@@ -97,9 +89,8 @@ export const editTodosAsync = (todo, success, fail) => (dispatch) => {
     .catch((error) => fail(error));
 };
 export const checkTodosAsync = (todo, success, fail) => (dispatch) => {
-  //   console.log(todo);
   todoServer
-    .patch(`/${todo.id}`, todo)
+    .patch(`/todos/${todo.id}`, todo)
     .then((res) => {
       dispatch(checkTodo(todo));
     })

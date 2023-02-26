@@ -1,23 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   checkTodosAsync,
   loadTodosAsync,
   SelectTodos,
 } from "../../features/todos_slice";
+import { setUsersEditAsync } from "../../features/users_slice";
 import ErrorMessage from "../../status/alert_error";
 import Modal from "../../status/modal";
 
 export default function Todos() {
   const dispatch = useDispatch();
   const todos = useSelector(SelectTodos);
+  const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [todoForDelete, setTodoForDelete] = useState({});
+  const { id } = useParams();
 
   useEffect(() => {
-    dispatch(loadTodosAsync());
-  }, [dispatch]);
+    dispatch(loadTodosAsync(id));
+    dispatch(
+      setUsersEditAsync(
+        id,
+        (data) => {
+          setUser(data);
+        },
+        (error) => {
+          setErrorMessage(error.message);
+        }
+      )
+    );
+  }, [dispatch, id]);
 
   const handleCheck = (e, u) => {
     u = { ...u, status: e.target.checked ? "completed" : "pending" };
@@ -40,15 +54,15 @@ export default function Todos() {
   };
   return (
     <>
-      <h1 className="mt-5">Todos</h1>
+      <h1 className="mt-5">{user.name} Todos</h1>
       <Modal va={todoForDelete} setErrorMessage={setErrorMessage} />
       <ErrorMessage errorMessage={errorMessage} />
       <Link
-        to={"/create-edit-todo"}
+        to={`/create-edit-todo/${id}`}
         className="btn btn-primary mb-4 float-right"
       >
         <i className="bi bi-plus-lg"></i>
-        {"   "} Create Todo
+        {"   "} Create Todo {todos.length}
       </Link>
       <table className="table">
         <thead>
@@ -79,7 +93,7 @@ export default function Todos() {
                 </td>
 
                 <td>
-                  <Link to={`/create-edit-todo/${u.id}`}>
+                  <Link to={`/create-edit-todo/todo/${u.id}`}>
                     <i className="bi bi-pencil-square"></i>
                   </Link>
                 </td>
@@ -97,6 +111,9 @@ export default function Todos() {
             ))}
         </tbody>
       </table>
+      <Link to={"/users"} className="btn btn-outline-primary float-right mt-4">
+        Back
+      </Link>
     </>
   );
 }

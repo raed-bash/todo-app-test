@@ -12,7 +12,7 @@ export default function CreateOrEditUser() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({ id: null });
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
@@ -33,7 +33,6 @@ export default function CreateOrEditUser() {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(`name: ${name} \nvalue: ${value}`);
     setUser({ ...user, [name]: value });
   };
   const handleSubmit = (e) => {
