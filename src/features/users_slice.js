@@ -28,6 +28,12 @@ export const usersSlice = createSlice({
       );
       state.value[userIndex] = action.payload;
     },
+    checkUser: (state, action) => {
+      const todoIndex = state.value.findIndex(
+        (n) => n.id === action.payload.id
+      );
+      state.value[todoIndex] = action.payload;
+    },
   },
 });
 export const loadUsersAsync = (success, fail) => (dispatch) => {
@@ -81,6 +87,17 @@ export const editUserAsync = (user, success, fail) => (dispatch) => {
     })
     .catch((error) => fail(error));
 };
-const { loadUsers, deleteUsers, createUsers, editUsers } = usersSlice.actions;
+export const checkUsersAsync = (user, success, fail) => (dispatch) => {
+  userServer
+    .patch(`/${user.id}`, user)
+    .then((res) => {
+      dispatch(checkUser(user));
+    })
+    .catch((error) => {
+      fail(error);
+    });
+};
+const { loadUsers, deleteUsers, createUsers, editUsers, checkUser } =
+  usersSlice.actions;
 export const SelectUsers = (state) => state.users.value;
 export default usersSlice.reducer;

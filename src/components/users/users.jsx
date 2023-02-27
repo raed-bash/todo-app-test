@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import LinkA from "../../addvanced/link_active";
-import { loadUsersAsync, SelectUsers } from "../../features/users_slice";
+import { checkUsersAsync, loadUsersAsync, SelectUsers } from "../../features/users_slice";
 import ErrorMessage from "../../status/alert_error";
 import Modal from "../../status/modal";
 
@@ -22,6 +22,18 @@ export default function Users() {
       )
     );
   }, [dispatch]);
+  const handleCheck = (e, u) => {
+    u = { ...u, status: e.target.checked ? "active" : "inactive" };
+    dispatch(
+      checkUsersAsync(
+        u,
+        () => {},
+        (error) => {
+          setErrorMessage(error.message);
+        }
+      )
+    );
+  };
   return (
     <>
       <h1 className="mt-5">Users</h1>
@@ -54,6 +66,13 @@ export default function Users() {
                 <td>{u.email}</td>
                 <td>{u.gender}</td>
                 <td>{u.status}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={u.status === "active" ? true : false}
+                    onChange={(e) => handleCheck(e, u)}
+                  />
+                </td>
                 <td>
                   <Link to={`/todos/${u.id}`}>
                     <i className="bi bi-list-task h4"></i>
