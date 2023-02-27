@@ -64,20 +64,20 @@ export default function Todos() {
         <i className="bi bi-plus-lg"></i>
         {"   "} Create Todo {todos.length}
       </Link>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Date</th>
-            <th scope="col">Status</th>
 
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {todos &&
-            todos.length > 0 &&
-            todos.map((u) => (
+      {todos.length > 0 ? (
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Date</th>
+              <th scope="col">Status</th>
+
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {todos.map((u) => (
               <tr key={u.id}>
                 <td>
                   <CheckTodo title={u.title} status={u.status} />
@@ -109,8 +109,11 @@ export default function Todos() {
                 </td>
               </tr>
             ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      ) : (
+        <h2 className="text-center p-5">No Todos Available</h2>
+      )}
       <Link to={"/users"} className="btn btn-outline-primary float-right mt-4">
         Back
       </Link>

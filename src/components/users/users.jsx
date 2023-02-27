@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import LinkA from "../../addvanced/link_active";
-import { checkUsersAsync, loadUsersAsync, SelectUsers } from "../../features/users_slice";
+import {
+  checkUsersAsync,
+  loadUsersAsync,
+  SelectUsers,
+} from "../../features/users_slice";
 import ErrorMessage from "../../status/alert_error";
 import Modal from "../../status/modal";
 
@@ -46,21 +50,21 @@ export default function Users() {
         <i className="bi bi-plus-lg"></i>
         {"   "} Create User {users.length}
       </LinkA>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Gender</th>
-            <th scope="col">Status</th>
 
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {users &&
-            users.length > 0 &&
-            users.map((u) => (
+      {users.length > 0 ? (
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Gender</th>
+              <th scope="col">Status</th>
+
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u) => (
               <tr key={u.id}>
                 <td>{u.name}</td>
                 <td>{u.email}</td>
@@ -95,8 +99,11 @@ export default function Users() {
                 </td>
               </tr>
             ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      ) : (
+        <h2 className="text-center p-5">No Users Available</h2>
+      )}
     </>
   );
 }
