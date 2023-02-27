@@ -11,7 +11,7 @@ const userServer = axios.create({
 });
 export const usersSlice = createSlice({
   name: "users",
-  initialState: { value: [], loaded: false },
+  initialState: { value: [], loadingUsers: false },
   reducers: {
     loadUsers: (state, action) => {
       state.value = action.payload;
@@ -34,6 +34,9 @@ export const usersSlice = createSlice({
       );
       state.value[todoIndex] = action.payload;
     },
+    loadingUsers: (state) => {
+      state.loadingUsers = true;
+    },
   },
 });
 export const loadUsersAsync = (success, fail) => (dispatch) => {
@@ -41,6 +44,7 @@ export const loadUsersAsync = (success, fail) => (dispatch) => {
     .get("/")
     .then((res) => {
       dispatch(loadUsers(res.data));
+      dispatch(loadingUsers());
     })
     .catch((error) => {
       fail(error);
@@ -97,7 +101,15 @@ export const checkUsersAsync = (user, success, fail) => (dispatch) => {
       fail(error);
     });
 };
-const { loadUsers, deleteUsers, createUsers, editUsers, checkUser } =
-  usersSlice.actions;
+const {
+  loadUsers,
+  deleteUsers,
+  createUsers,
+  editUsers,
+  checkUser,
+  loadingUsers,
+} = usersSlice.actions;
 export const SelectUsers = (state) => state.users.value;
+export const SelectLoadingUsers = (state) => state.users.loadingUsers;
+
 export default usersSlice.reducer;

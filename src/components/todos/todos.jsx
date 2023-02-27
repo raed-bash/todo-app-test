@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import {
   checkTodosAsync,
   loadTodosAsync,
+  SelectLoadingTodos,
   SelectTodos,
 } from "../../features/todos_slice";
 import { setUsersEditAsync } from "../../features/users_slice";
@@ -13,6 +14,7 @@ import Modal from "../../status/modal";
 export default function Todos() {
   const dispatch = useDispatch();
   const todos = useSelector(SelectTodos);
+  const loading = useSelector(SelectLoadingTodos);
   const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [todoForDelete, setTodoForDelete] = useState({});
@@ -67,55 +69,59 @@ export default function Todos() {
         {"   "} Create Todo {todos.length}
       </Link>
 
-      {todos.length > 0 ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Date</th>
-              <th scope="col">Status</th>
-              <th scope="col"></th>
-              <th scope="col"></th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {todos.map((u) => (
-              <tr key={u.id}>
-                <td>
-                  <CheckTodo title={u.title} status={u.status} />
-                </td>
-                <td>{u.due_on.slice(0, 10)}</td>
-                <td>{u.status}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={u.status === "completed" ? true : false}
-                    onChange={(e) => handleCheck(e, u)}
-                  />
-                </td>
-
-                <td>
-                  <Link to={`/create-edit-todo/todo/${u.id}`}>
-                    <i className="bi bi-pencil-square"></i>
-                  </Link>
-                </td>
-                <td>
-                  <Link
-                    to={""}
-                    onClick={() => setTodoForDelete(u)}
-                    data-toggle="modal"
-                    data-target="#Modal"
-                  >
-                    <i className="bi bi-trash"></i>
-                  </Link>
-                </td>
+      {loading ? (
+        todos.length > 0 ? (
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {todos.map((u) => (
+                <tr key={u.id}>
+                  <td>
+                    <CheckTodo title={u.title} status={u.status} />
+                  </td>
+                  <td>{u.due_on.slice(0, 10)}</td>
+                  <td>{u.status}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={u.status === "completed" ? true : false}
+                      onChange={(e) => handleCheck(e, u)}
+                    />
+                  </td>
+
+                  <td>
+                    <Link to={`/create-edit-todo/todo/${u.id}`}>
+                      <i className="bi bi-pencil-square"></i>
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      to={""}
+                      onClick={() => setTodoForDelete(u)}
+                      data-toggle="modal"
+                      data-target="#Modal"
+                    >
+                      <i className="bi bi-trash"></i>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <h2 className="text-center p-5">No Todos Available</h2>
+        )
       ) : (
-        <h2 className="text-center p-5">No Todos Available</h2>
+        <h2 className="text-center p-5">Waiting for server response...</h2>
       )}
       <Link to={"/users"} className="btn btn-outline-primary float-right mt-4">
         Back

@@ -5,6 +5,7 @@ import LinkA from "../../addvanced/link_active";
 import {
   checkUsersAsync,
   loadUsersAsync,
+  SelectLoadingUsers,
   SelectUsers,
 } from "../../features/users_slice";
 import ErrorMessage from "../../status/alert_error";
@@ -13,6 +14,7 @@ import Modal from "../../status/modal";
 export default function Users() {
   const dispatch = useDispatch();
   const users = useSelector(SelectUsers);
+  const loading = useSelector(SelectLoadingUsers);
   const [errorMessage, setErrorMessage] = useState(null);
   const [UserForDelete, setUserForDelete] = useState({});
 
@@ -50,59 +52,62 @@ export default function Users() {
         <i className="bi bi-plus-lg"></i>
         {"   "} Create User {users.length}
       </LinkA>
+      {loading ? (
+        users.length > 0 ? (
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Status</th>
 
-      {users.length > 0 ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Gender</th>
-              <th scope="col">Status</th>
-
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u.id}>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td>{u.gender}</td>
-                <td>{u.status}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={u.status === "active" ? true : false}
-                    onChange={(e) => handleCheck(e, u)}
-                  />
-                </td>
-                <td>
-                  <Link to={`/todos/${u.id}`}>
-                    <i className="bi bi-list-task h4"></i>
-                  </Link>
-                </td>
-                <td>
-                  <Link to={`/users/create-edit-user/${u.id}`}>
-                    <i className="bi bi-pencil-square"></i>
-                  </Link>
-                </td>
-                <td>
-                  <Link
-                    to={""}
-                    onClick={() => setUserForDelete(u)}
-                    data-toggle="modal"
-                    data-target="#Modal"
-                  >
-                    <i className="bi bi-trash"></i>
-                  </Link>
-                </td>
+                <th scope="col"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.name}</td>
+                  <td>{u.email}</td>
+                  <td>{u.gender}</td>
+                  <td>{u.status}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={u.status === "active" ? true : false}
+                      onChange={(e) => handleCheck(e, u)}
+                    />
+                  </td>
+                  <td>
+                    <Link to={`/todos/${u.id}`}>
+                      <i className="bi bi-list-task h4"></i>
+                    </Link>
+                  </td>
+                  <td>
+                    <Link to={`/users/create-edit-user/${u.id}`}>
+                      <i className="bi bi-pencil-square"></i>
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      to={""}
+                      onClick={() => setUserForDelete(u)}
+                      data-toggle="modal"
+                      data-target="#Modal"
+                    >
+                      <i className="bi bi-trash"></i>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <h2 className="text-center p-5">No Users Available</h2>
+        )
       ) : (
-        <h2 className="text-center p-5">No Users Available</h2>
+        <h2 className="text-center p-5">Waiting for server response...</h2>
       )}
     </>
   );
