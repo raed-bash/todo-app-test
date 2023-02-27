@@ -26,9 +26,6 @@ export default function Navbar() {
           <LinkA className="nav-item nav-link" to={"/users"}>
             Users
           </LinkA>
-          <LinkA className="nav-item nav-link" to={"/todos"}>
-            Todos
-          </LinkA>
         </div>
       </div>
     </nav>

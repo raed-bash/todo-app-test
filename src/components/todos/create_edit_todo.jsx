@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   createTodosAsync,
@@ -7,26 +7,19 @@ import {
   setTodosEditAsync,
 } from "../../features/todos_slice";
 import ErrorMessage from "../../status/alert_error";
-import { loadUsersAsync, SelectUsers } from "../../features/users_slice";
 
 export default function CreateOrEditTodo() {
-  const { id } = useParams();
+  const { id, userId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [todo, setTodo] = useState({});
+  const [todo, setTodo] = useState({
+    id: null,
+    status: "pending",
+    user_id: userId,
+  });
 
   const [errorMessage, setErrorMessage] = useState(null);
-  const users = useSelector(SelectUsers);
-  useEffect(() => {
-    dispatch(
-      loadUsersAsync(
-        () => {},
-        (error) => {
-          setErrorMessage(error.message);
-        }
-      )
-    );
-  }, [dispatch]);
+
   useEffect(() => {
     if (id) {
       dispatch(
@@ -104,33 +97,6 @@ export default function CreateOrEditTodo() {
             required
           />
         </div>
-        {id ? (
-          <></>
-        ) : (
-          <div className="form-group">
-            <div className="form-row align-items-center">
-              <div className="col-auto my-1">
-                <label htmlFor="selectUser">Select User</label>
-                <select
-                  name="user_id"
-                  id="selectUser"
-                  className="custom-select mr-sm-2"
-                  required
-                  onChange={(e) => handleChange(e)}
-                >
-                  <option value="">Chosse...</option>
-                  {users &&
-                    users.length > 0 &&
-                    users.map((u) => (
-                      <option key={u.id} value={u.id}>
-                        {u.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
 
         <button
           type="submit"

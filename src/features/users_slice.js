@@ -62,12 +62,9 @@ export const setUsersEditAsync = (userId, success, fail) => (dispatch) => {
     });
 };
 export const createUserAsync = (user, success, fail) => (dispatch) => {
-  user = { ...user, id: null };
-
   userServer
     .post(`/`, user)
     .then((res) => {
-      console.log(res);
       dispatch(createUsers(res.data));
       success(res.data);
     })

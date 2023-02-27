@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import LinkA from "../../addvanced/link_active";
 import { loadUsersAsync, SelectUsers } from "../../features/users_slice";
 import ErrorMessage from "../../status/alert_error";
 import Modal from "../../status/modal";
@@ -26,13 +27,13 @@ export default function Users() {
       <h1 className="mt-5">Users</h1>
       <Modal va={UserForDelete} setErrorMessage={setErrorMessage} />
       <ErrorMessage errorMessage={errorMessage} />
-      <Link
-        to={"/create-edit-user"}
+      <LinkA
+        to={"/users/create-edit-user"}
         className="btn btn-primary mb-4 float-right"
       >
         <i className="bi bi-plus-lg"></i>
-        {"   "} Create User
-      </Link>
+        {"   "} Create User {users.length}
+      </LinkA>
       <table className="table">
         <thead>
           <tr>
@@ -53,9 +54,13 @@ export default function Users() {
                 <td>{u.email}</td>
                 <td>{u.gender}</td>
                 <td>{u.status}</td>
-
                 <td>
-                  <Link to={`/create-edit-user/${u.id}`}>
+                  <Link to={`/todos/${u.id}`}>
+                    <i className="bi bi-list-task h4"></i>
+                  </Link>
+                </td>
+                <td>
+                  <Link to={`/users/create-edit-user/${u.id}`}>
                     <i className="bi bi-pencil-square"></i>
                   </Link>
                 </td>

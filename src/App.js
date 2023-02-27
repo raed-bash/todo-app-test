@@ -13,15 +13,21 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />}></Route>
           <Route path="users" element={<Users />}></Route>
-          <Route path="todos" element={<Todos />}></Route>
-          <Route path="create-edit-user" element={<CreateOrEditUser />}></Route>
+          <Route path="todos/:id" element={<Todos />}></Route>
           <Route
-            path="create-edit-user/:id"
+            path="users/create-edit-user"
             element={<CreateOrEditUser />}
           ></Route>
-          <Route path="create-edit-todo" element={<CreateOrEditTodo />}></Route>
           <Route
-            path="create-edit-todo/:id"
+            path="/users/create-edit-user/:id"
+            element={<CreateOrEditUser />}
+          ></Route>
+          <Route
+            path="create-edit-todo/:userId"
+            element={<CreateOrEditTodo />}
+          ></Route>
+          <Route
+            path="create-edit-todo/todo/:id"
             element={<CreateOrEditTodo />}
           ></Route>
         </Route>
