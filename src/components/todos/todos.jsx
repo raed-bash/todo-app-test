@@ -54,7 +54,9 @@ export default function Todos() {
   };
   return (
     <>
-      <h1 className="mt-5">{user.name} Todos</h1>
+      <h1 className="mt-5">
+        Todos User: <span className="font-weight-normal">{user.name}</span>
+      </h1>
       <Modal va={todoForDelete} setErrorMessage={setErrorMessage} />
       <ErrorMessage errorMessage={errorMessage} />
       <Link
