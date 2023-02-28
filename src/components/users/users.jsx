@@ -86,17 +86,19 @@ export default function Users() {
         <i className="bi bi-plus-lg"></i>
         {"   "} Create User {users.length}
       </LinkA>
-
+      <div className="table-responsive-sm">
       {waitLoading ? (
         users.length > 0 ? (
-          <table className="table">
+          <table className="table " style={{ overflowX: "scroll" }}>
             <thead>
               <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Status</th>
-
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -116,7 +118,7 @@ export default function Users() {
                   </td>
                   <td>
                     <Link to={`/todos/${u.id}`}>
-                      <i className="bi bi-list-task h4"></i>
+                      <i className="bi bi-list-task"></i>
                     </Link>
                   </td>
                   <td>
@@ -144,6 +146,7 @@ export default function Users() {
       ) : (
         <h2 className="text-center p-5">Waiting for server response...</h2>
       )}
+      </div>
     </>
   );
 }
