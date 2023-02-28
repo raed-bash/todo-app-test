@@ -27,7 +27,7 @@ export const usersSlice = createSlice({
     editUsers: (state, action) => {
       const userIndex = state.value.findIndex(
         (n) => n.id === action.payload.id
-      );
+      ); 
       state.value[userIndex] = action.payload;
     },
     checkUser: (state, action) => {
@@ -89,7 +89,7 @@ export const editUserAsync = (user, success, fail) => (dispatch) => {
     .patch(`/${user.id}`, user)
     .then(() => {
       success();
-      dispatch(editUsers());
+      dispatch(editUsers(user));
     })
     .catch((error) => fail(error));
 };
