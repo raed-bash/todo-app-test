@@ -14,6 +14,7 @@ export default function CreateOrEditUser() {
   const dispatch = useDispatch();
   const [user, setUser] = useState({ id: null });
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -22,6 +23,7 @@ export default function CreateOrEditUser() {
           id,
           (data) => {
             setUser(data);
+            setLoading(true);
           },
           (error) => {
             setErrorMessage(error.message);
@@ -29,7 +31,7 @@ export default function CreateOrEditUser() {
         )
       );
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, setLoading]);
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -63,10 +65,8 @@ export default function CreateOrEditUser() {
       );
     }
   };
-  return (
-    <div className="mt-5">
-      <h2 className="mb-5">{id ? "Edit User" : "Create User"}</h2>
-      <ErrorMessage errorMessage={errorMessage} />
+  const Form = () => {
+    return (
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="form-group">
           <label htmlFor="username">User Name</label>
@@ -149,6 +149,13 @@ export default function CreateOrEditUser() {
           Back
         </button>
       </form>
+    );
+  };
+  return (
+    <div className="mt-5">
+      <h2 className="mb-5">{id ? "Edit User" : "Create User"}</h2>
+      <ErrorMessage errorMessage={errorMessage} />
+      {id ? loading ? <Form /> : <h3>Loading Data...</h3> : <Form />}
     </div>
   );
 }

@@ -5,7 +5,6 @@ import LinkA from "../../addvanced/link_active";
 import {
   checkUsersAsync,
   loadUsersAsync,
-  SelectLoadingUsers,
   SelectUsers,
 } from "../../features/users_slice";
 import ErrorMessage from "../../status/alert_error";
@@ -14,20 +13,22 @@ import Modal from "../../status/modal";
 export default function Users() {
   const dispatch = useDispatch();
   const users = useSelector(SelectUsers);
-  const loading = useSelector(SelectLoadingUsers);
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [UserForDelete, setUserForDelete] = useState({});
 
   useEffect(() => {
     dispatch(
       loadUsersAsync(
-        () => {},
+        () => {
+          setLoading(true);
+        },
         (error) => {
           setErrorMessage(error.message);
         }
       )
     );
-  }, [dispatch]);
+  }, [dispatch, setLoading]);
   const handleCheck = (e, u) => {
     u = { ...u, status: e.target.checked ? "active" : "inactive" };
     dispatch(

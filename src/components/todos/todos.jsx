@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import {
   checkTodosAsync,
   loadTodosAsync,
-  SelectLoadingTodos,
   SelectTodos,
 } from "../../features/todos_slice";
 import { setUsersEditAsync } from "../../features/users_slice";
@@ -14,26 +13,31 @@ import Modal from "../../status/modal";
 export default function Todos() {
   const dispatch = useDispatch();
   const todos = useSelector(SelectTodos);
-  const loading = useSelector(SelectLoadingTodos);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [todoForDelete, setTodoForDelete] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(loadTodosAsync(id));
+    dispatch(
+      loadTodosAsync(id, () => {
+        setLoading(true);
+      })
+    );
     dispatch(
       setUsersEditAsync(
         id,
         (data) => {
           setUser(data);
+          setLoading(true);
         },
         (error) => {
           setErrorMessage(error.message);
         }
       )
     );
-  }, [dispatch, id]);
+  }, [dispatch, id, setLoading]);
 
   const handleCheck = (e, u) => {
     u = { ...u, status: e.target.checked ? "completed" : "pending" };

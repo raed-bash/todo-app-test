@@ -12,6 +12,7 @@ export default function CreateOrEditTodo() {
   const { id, userId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [todo, setTodo] = useState({
     id: null,
     status: "pending",
@@ -27,6 +28,7 @@ export default function CreateOrEditTodo() {
           id,
           (data) => {
             setTodo(data);
+            setLoading(true);
           },
           (error) => {
             setErrorMessage(error.message);
@@ -34,7 +36,7 @@ export default function CreateOrEditTodo() {
         )
       );
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, setLoading, loading]);
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -68,10 +70,8 @@ export default function CreateOrEditTodo() {
       );
     }
   };
-  return (
-    <div className="mt-5">
-      <h2 className="mb-5">{id ? "Edit Todo" : "Create Todo"}</h2>
-      <ErrorMessage errorMessage={errorMessage} />
+  const Form = () => {
+    return (
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="form-group">
           <label htmlFor="Todo">Todo Name</label>
@@ -112,6 +112,13 @@ export default function CreateOrEditTodo() {
           Back
         </button>
       </form>
+    );
+  };
+  return (
+    <div className="mt-5">
+      <h2 className="mb-5">{id ? "Edit Todo" : "Create Todo"}</h2>
+      <ErrorMessage errorMessage={errorMessage} />
+      {id ? loading ? <Form /> : <h3>Loading Data...</h3> : <Form />}
     </div>
   );
 }

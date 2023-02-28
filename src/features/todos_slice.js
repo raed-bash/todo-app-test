@@ -11,7 +11,7 @@ const todoServer = axios.create({
 });
 export const todosSlice = createSlice({
   name: "todos",
-  initialState: { value: [], loadingTodos: false },
+  initialState: { value: [] },
   reducers: {
     loadTodos: (state, action) => {
       state.value = action.payload;
@@ -33,10 +33,7 @@ export const todosSlice = createSlice({
         (n) => n.id === action.payload.id
       );
       state.value[todoIndex] = action.payload;
-    },
-    loadingTodos: (state) => {
-      state.loadingTodos = true;
-    },
+    }, 
   },
 });
 export const loadTodosAsync = (userId, success, fail) => (dispatch) => {
@@ -44,7 +41,7 @@ export const loadTodosAsync = (userId, success, fail) => (dispatch) => {
     .get(`/users/${userId}/todos`)
     .then((res) => {
       dispatch(loadTodos(res.data));
-      dispatch(loadingTodos());
+      success();
     })
     .catch((error) => {
       fail(error);
@@ -102,15 +99,8 @@ export const checkTodosAsync = (todo, success, fail) => (dispatch) => {
       fail(error);
     });
 };
-const {
-  loadTodos,
-  deleteTodos,
-  createTodos,
-  editTodos,
-  checkTodo,
-  loadingTodos,
-} = todosSlice.actions;
+const { loadTodos, deleteTodos, createTodos, editTodos, checkTodo } =
+  todosSlice.actions;
 export const SelectTodos = (state) => state.todos.value;
-export const SelectLoadingTodos = (state) => state.todos.loadingTodos;
 
 export default todosSlice.reducer;
